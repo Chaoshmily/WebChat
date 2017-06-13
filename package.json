@@ -3,16 +3,27 @@
   "version": "1.0.0",
   "description": "WebChat",
   "main": "app.js",
+  "dependencies": {
+    "koa": "2.0.0",
+    "koa-router": "7.2.0",
+    "koa-bodyparser": "4.2.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "start": "node app.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chaoshmily/WebChat.git"
+  },
   "keywords": [
-    "nodejs",
-    "koa"
+    "koa",
+    "nodejs"
   ],
   "author": "nicepink",
-  "license": "ISC",
-  "dependencies": {
-    "koa": "2.0.0"
-  }
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Chaoshmily/WebChat/issues"
+  },
+  "homepage": "https://github.com/Chaoshmily/WebChat#readme"
 }
