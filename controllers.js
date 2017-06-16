@@ -1,5 +1,6 @@
 const fs = require('fs')
 
+
 function addMapping(router, mapping) {
     for (let url in mapping) {
         if (url.startsWith('GET')) {
@@ -16,6 +17,7 @@ function addMapping(router, mapping) {
     }
 }
 
+// 扫描目录，把controllers里的控制加载到路由
 function addControllers(router, dir) {
     files = fs.readdirSync(__dirname + dir)
     js_files = files.filter((f) => {
@@ -30,6 +32,7 @@ function addControllers(router, dir) {
 
 module.exports = function (dir) {
     let
+    // 未设置路径默认为/controller
         controller_dir = dir || '/controllers',
         router = require('koa-router')()
     addControllers(router, controller_dir)
