@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <title>Welcome</title>
+</head>
+
+<body style="padding-top: 40px;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebChat</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="starter-template" style="padding: 40px 15px;">
+            <h1>这是一个网页聊天室</h1>
+            <p class="lead">在这里你可以认识许多有趣的人。<br> 在下方开始聊天吧！</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Room</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div style="height:400px; overflow-x:hidden; overflow-y:scroll;">
+                            <div id="message-list">
+
+                            </div>
+                        </div>
+                        <div>
+                            <form id="form-chat" action="#">
+                                <div class="input-group">
+                                    <input id="msg" type="text" class="form-control" placeholder="A good day, isn't it?">
+                                    <span class="input-group-btn">
+                                    <button id="send-msg" class="btn btn-default" type="submit">Go</button></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">User</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div style="height: 435px; overflow-x: hidden; overflow-y:scroll;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io('http://10.128.127.68:3000')
+        var msg
+        socket.on('show', (data) => {
+            console.log(data)
+        })
+        socket.on('news', (msg) => {
+            $('#message-list').append($('<li>').text(msg))
+            var msgHeight = $('#message-list').height()
+            $('#message-list').parent().scrollTop(msgHeight)
+        })
+        $('#form-chat').submit(function () {
+            msg = $('#msg').val()
+            socket.emit('sendMsg', msg)
+            $('#msg').val('') // 清空输入框
+            return false;
+        });
+    </script>
+</body>
+
+</html>

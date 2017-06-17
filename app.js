@@ -4,7 +4,12 @@ const
     controller = require('./controllers'),
     serve = require('koa-static'), // 静态资源
     model = require('./model') // 数据原型
+    Server = require('socket.io') //websocket
 var app = new Koa()
+var server = app.listen(3000)
+var io = new Server(server)
+
+console.log('app start at port 3000...')
 
 // 打印信息
 app.use(async(ctx, next) => {
@@ -30,5 +35,21 @@ app.use(templating())
 // 处理路由
 app.use(controller())
 
-app.listen(3000)
-console.log('app start at port 3000...')
+var count = 0
+io.on('connection', (socket) => {
+    console.log('a client connected')
+    socket.emit('show', `you are my ${++count} user`) // 想连接人发送你是第几个连接的
+    io.sockets.emit('news', 'a new one join') // 有人加入就广播
+
+    socket.on('disconnect', () => { // 有人退出也广播
+        count--
+        io.sockets.emit('news', 'a user out')
+    })
+
+    socket.on('sendMsg', (msg) => { // 广播发送数据
+        if (msg != '' && msg.trim() != '') {
+            console.log(msg)
+            io.sockets.emit('news', msg)
+        }
+    })
+})

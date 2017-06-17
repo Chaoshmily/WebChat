@@ -17,7 +17,7 @@ fn_signin = async(ctx, next) => {
     })
     console.log(users.length)
     if (users.length == 1) {
-        ctx.response.body = `<h1>Welcome, ${username}!</h1>`
+        ctx.render('chatRoom.html', {})
     } else {
         ctx.response.body = `<h1>Login failed!</h1>
         <p><a href="/">Try again</a></p>`
@@ -60,48 +60,6 @@ fn_checkRegister = async(ctx, next) => {
         })
         ctx.render('login.html', {})
     }
-
-    // (async() => {
-    //     var user = await User.create({
-    //         username: username,
-    //         password: password,
-    //         email: email,
-    //         tel: tel
-    //     })
-    //     console.log('created: ' + JSON.stringify(user))
-    // })()
-
-    // var
-    //     now = Date.now(),
-    //     Pet = model.Pet
-    // console.log(now)
-
-    // ;
-    // (async() => {
-    //     var dog = await Pet.create({
-    //         id: 'd-' + now,
-    //         name: 'Odie',
-    //         gender: false,
-    //         birth: '2008-08-08',
-    //         createdAt: now,
-    //         updatedAt: now,
-    //         version: 0
-    //     })
-    //     console.log('created: ' + JSON.stringify(dog))
-    // })()
-
-    // ;
-    // (async() => {
-    //     var pets = await Pet.findAll({
-    //         where: {
-    //             name: 'Odie'
-    //         }
-    //     });
-    //     console.log(`find ${pets.length} pets:`);
-    //     for (let p of pets) {
-    //         console.log(JSON.stringify(p, null, '  '))
-    //     }
-    // })()
 }
 
 module.exports = {
@@ -110,3 +68,45 @@ module.exports = {
     'GET /register': fn_register,
     'POST /checkRegister': fn_checkRegister
 }
+
+// (async() => {
+//     var user = await User.create({
+//         username: username,
+//         password: password,
+//         email: email,
+//         tel: tel
+//     })
+//     console.log('created: ' + JSON.stringify(user))
+// })()
+
+// var
+//     now = Date.now(),
+//     Pet = model.Pet
+// console.log(now)
+
+// ;
+// (async() => {
+//     var dog = await Pet.create({
+//         id: 'd-' + now,
+//         name: 'Odie',
+//         gender: false,
+//         birth: '2008-08-08',
+//         createdAt: now,
+//         updatedAt: now,
+//         version: 0
+//     })
+//     console.log('created: ' + JSON.stringify(dog))
+// })()
+
+// ;
+// (async() => {
+//     var pets = await Pet.findAll({
+//         where: {
+//             name: 'Odie'
+//         }
+//     });
+//     console.log(`find ${pets.length} pets:`);
+//     for (let p of pets) {
+//         console.log(JSON.stringify(p, null, '  '))
+//     }
+// })()
