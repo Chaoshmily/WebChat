@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>task1</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+
+<body>
+    <form action="/checkRegister" method="post">
+        <div class="form-gtoup">
+            <label for="username">名称</label>
+            <input id="username" class="username form-control" name="username" type="text" value="{{ username }}">
+            <span class="username check"></span>
+        </div>
+        <div class="form-gtoup">
+            <label for="password">密码</label>
+            <input id="password" class="password form-control" name="password" type="password" value="{{ password }}">
+            <span class="password check"></span>
+        </div>
+        <div class="form-gtoup">
+            <label for="repassword">密码确认</label>
+            <input id="repassword" class="repassword form-control" name="repassword" type="password" value="{{ repassword }}">
+            <span class="repassword check"></span>
+        </div>
+        <div class="form-gtoup">
+            <label for="email">邮箱</label>
+            <input id="email" class="email form-control" name="email" type="text" value="{{ email }}">
+            <span class="email check"></span>
+        </div>
+        <div class="form-gtoup">
+            <label for="tel">手机</label>
+            <input id="tel" class="tel form-control" name="tel" type="text" value="{{ tel }}">
+            <span class="tel check"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">注册</button>
+        <a href="/" class="btn btn-default">登录</a>
+        {{ error }}
+    </form>
+    <script src="js/register.js"></script>
+
+</body>
+
+</html>

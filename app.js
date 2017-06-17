@@ -32,36 +32,3 @@ app.use(controller())
 
 app.listen(3000)
 console.log('app start at port 3000...')
-
-
-var
-    now = Date.now(),
-    Pet = model.Pet
-console.log(now)
-
-;
-(async() => {
-    var dog = await Pet.create({
-        id: 'd-' + now,
-        name: 'Odie',
-        gender: false,
-        birth: '2008-08-08',
-        createdAt: now,
-        updatedAt: now,
-        version: 0
-    })
-    console.log('created: ' + JSON.stringify(dog))
-})()
-
-;
-(async() => {
-    var pets = await Pet.findAll({
-        where: {
-            name: 'Odie'
-        }
-    });
-    console.log(`find ${pets.length} pets:`);
-    for (let p of pets) {
-        console.log(JSON.stringify(p, null, '  '))
-    }
-})()

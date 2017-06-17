@@ -14,3 +14,26 @@ form {
     background: rgba(255, 255, 255, .8);
     border-radius: 20px;
 }
+
+.check {
+    margin-bottom: 10px;
+    display: block;
+    font: 12px/20px 微软雅黑;
+    color: #555;
+}
+
+input.success {
+    border-color: #60ba49;
+}
+
+span.success {
+    color: #60ba49;
+}
+
+input.fail {
+    border-color: #f55;
+}
+
+span.fail {
+    color: #f55;
+}

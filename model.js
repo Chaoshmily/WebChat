@@ -27,6 +27,20 @@ var Pet = sequelize.define('pet', {
     timestamps: false
 })
 
+var User = sequelize.define('t_user', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
+    username: Sequelize.STRING(20),
+    password: Sequelize.STRING(20),
+    email: Sequelize.STRING(40),
+    tel: Sequelize.STRING(20)
+}, {
+    timestamps: false
+})
+
 module.exports = {
-    "Pet": Pet
+    "Pet": Pet,
+    "User": User
 }
