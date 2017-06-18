@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <title>Welcome</title>
 </head>
 
@@ -28,12 +28,17 @@
                     <div class="panel-body">
                         <div id="message-list" style="height: 400px; overflow-x:hidden; overflow-y:scroll">
                             <ul class="list-group">
+                                <li class="list-group-item">Cras justo odio</li>
+                                <li class="list-group-item">Dapibus ac facilisis in</li>
+                                <li class="list-group-item">Morbi leo risus</li>
+                                <li class="list-group-item">Porta ac consectetur ac</li>
+                                <li class="list-group-item">Vestibulum at eros</li>
                             </ul>
                         </div>
                         <form action="#" id="form-chat">
                             <div class="input-group">
-                                <input type="text" id="msg" class="form-control" placeholder="Write some message">
-                                <span id="send" class="input-group-addon btn btn-primary">Send</span>
+                                <input type="text" class="form-control" placeholder="Write some message">
+                                <span class="input-group-addon btn btn-primary">Send</span>
                             </div>
                         </form>
                     </div>
@@ -55,29 +60,6 @@
         </footer>
     </div>
     <!--container-->
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io('http://10.128.127.68:3000')
-        var msg
-        socket.on('show', (data) => {
-            console.log(data)
-        })
-        socket.on('news', (msg) => {
-            $('#message-list > ul').append(`<li class="list-group-item">${msg}</li>`)
-            var msgHeight = $('#message-list').height()
-            $('#message-list').parent().scrollTop(msgHeight)
-        })
-        $('#form-chat').submit(sendMsg);
-        $('#send').click(sendMsg);
-
-        function sendMsg() {
-            msg = $('#msg').val()
-            socket.emit('sendMsg', msg)
-            $('#msg').val('') // 清空输入框
-            return false;
-        }
-    </script>
 </body>
 
 </html>
