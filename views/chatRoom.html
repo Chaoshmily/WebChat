@@ -26,9 +26,11 @@
                         Chat
                     </div>
                     <div class="panel-body">
-                        <div id="message-list" style="height: 400px; overflow-x:hidden; overflow-y:scroll">
-                            <ul class="list-group">
-                            </ul>
+                        <div style="height: 400px; overflow-x:hidden; overflow-y:scroll">
+                            <div id="message-list">
+                                <ul class="list-group">
+                                </ul>
+                            </div>
                         </div>
                         <form action="#" id="form-chat">
                             <div class="input-group">
@@ -39,13 +41,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div id="room" class="col-md-4">
                 <div class="panel panel-info" style="height: 510px;">
                     <div class="panel-heading">
                         Room
                     </div>
                     <div class="panel-body">
-                        Basic panel example
+                        <ul class="list-group">
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -68,14 +71,21 @@
             var msgHeight = $('#message-list').height()
             $('#message-list').parent().scrollTop(msgHeight)
         })
-        $('#form-chat').submit(sendMsg);
-        $('#send').click(sendMsg);
+        $('#form-chat').submit(sendMsg)
+        $('#send').click(sendMsg)
+
+        socket.on('syncUser', (onlines) => {
+            $('#room ul li').remove()
+            for(let o of onlines) {
+                $('#room ul').append(`<li class="list-group-item">${o}</li>`)
+            }
+        })
 
         function sendMsg() {
             msg = $('#msg').val()
             socket.emit('sendMsg', msg)
             $('#msg').val('') // 清空输入框
-            return false;
+            return false
         }
     </script>
 </body>

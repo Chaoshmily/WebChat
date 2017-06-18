@@ -1,9 +1,11 @@
 model = require('../model') // 数据原型
 
+// 渲染登陆页
 fn_login = async(ctx, next) => {
     ctx.render('login.html', {})
 }
 
+// 渲染登陆成功与否页
 fn_signin = async(ctx, next) => {
     var
         username = ctx.request.body.username || '',
@@ -15,8 +17,7 @@ fn_signin = async(ctx, next) => {
             password: password
         }
     })
-    console.log(users.length)
-    if (users.length == 1) {
+    if (users.length == 1) { // 登陆成功
         ctx.render('chatRoom.html', {})
     } else {
         ctx.response.body = `<h1>Login failed!</h1>
@@ -24,10 +25,12 @@ fn_signin = async(ctx, next) => {
     }
 }
 
+// 渲染注册页
 fn_register = async(ctx, next) => {
     ctx.render('register.html', {})
 }
 
+// 渲染检查用户注册成功与否页
 fn_checkRegister = async(ctx, next) => {
     var
         username = ctx.request.body.username || '',
