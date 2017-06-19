@@ -3,18 +3,27 @@ var iPassword = document.getElementsByClassName('password');
 var iRepassword = document.getElementsByClassName('repassword');
 var iEmail = document.getElementsByClassName('email');
 var iTel = document.getElementsByClassName('tel');
-var button = document.getElementsByTagName('button');
+var iButton = document.getElementsByTagName('button');
+var iForm = document.getElementsByTagName('form')[0];
 
-// 初始化
-(function() {
-    check(iName, '名称可用', '请输入4-16之间的字符数');
-    check(iPassword, '密码可用', '请输入4-16之间的字符数');
-    check(iRepassword, '密码可用', '请输入4-16之间的字符数', 'repassword');
-    check(iEmail, '邮箱可用', '错误的邮箱', 'email');
-    check(iTel, '手机号可用', '错误的手机号', 'tel')
-})()
+iForm.onsubmit = function() {
+   var flag = false;
+    if (iName[1].className.indexOf('success') != -1 &&
+        iPassword[1].className.indexOf('success') != -1 &&
+        iRepassword[1].className.indexOf('success') != -1 &&
+        iEmail[1].className.indexOf('success') != -1 &&
+        iTel[1].className.indexOf('success') != -1) {
+        flag = true;
+    }
+    if (flag) {
+        return true
+    } else {
+        alert('提交失败');
+        return false
+    }
+}
 
-button[0].onclick = function() {
+iButton[0].onclick = function() {
     var flag = false;
     if (iName[1].className.indexOf('success') != -1 &&
         iPassword[1].className.indexOf('success') != -1 &&
@@ -24,11 +33,22 @@ button[0].onclick = function() {
         flag = true;
     }
     if (flag) {
-        alert('提交成功');
+        return true
     } else {
         alert('提交失败');
+        return false
     }
 }
+
+// 初始化
+function init() {
+    check(iName, '名称可用', '请输入4-16之间的字符数');
+    check(iPassword, '密码可用', '请输入4-16之间的字符数');
+    check(iRepassword, '密码可用', '请输入4-16之间的字符数', 'repassword');
+    check(iEmail, '邮箱可用', '错误的邮箱', 'email');
+    check(iTel, '手机号可用', '错误的手机号', 'tel');
+}
+
 
 iName[0].onfocus = function() {
     iName[1].innerHTML = '必填，长度为4~16个字符';

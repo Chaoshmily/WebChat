@@ -2,7 +2,7 @@ model = require('../model') // 数据原型
 
 // 渲染登陆页
 fn_login = async(ctx, next) => {
-    ctx.render('login.html', {})
+    ctx.render('chatRoom.html', {})
 }
 
 // 渲染登陆成功与否页
@@ -52,16 +52,18 @@ fn_checkRegister = async(ctx, next) => {
             repassword: repassword,
             email: email,
             tel: tel,
-            error: "用户名已存在"
+            error: "用户名已存在",
+            init: 'init()'
         })
     } else {
         var user = User.create({
             username: username,
             password: password,
             email: email,
-            tel: tel
+            tel: tel,
+            online: false
         })
-        ctx.render('login.html', {})
+        ctx.render('charRoom.html', {})
     }
 }
 

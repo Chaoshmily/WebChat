@@ -7,29 +7,121 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/bootstrap.css">
     <title>Welcome</title>
+    <style>
+        .send-left {
+            text-align: left;
+        }
+
+        .send-right {
+            box-sizing: border-box;
+            text-align: right;
+            padding-right: 16px;
+        }
+
+        .send-title {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .send-msg-left {
+            display: inline-block;
+            box-sizing: border-box;
+            position: relative;
+            margin-left: 8px;
+            padding: 0 10px;
+            height: 30px;
+            line-height: 30px;
+            background: #e7e7e7;
+            border-radius: 5px;
+        }
+
+        .send-msg-right {
+            display: inline-block;
+            box-sizing: border-box;
+            position: relative;
+            margin-right: 8px;
+            padding: 0 10px;
+            height: 30px;
+            line-height: 30px;
+            background: #4c9ed9;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .send-msg-left .arrow-left {
+            position: absolute;
+            top: 5px;
+            left: -16px;
+            /* 圆角的位置需要细心调试哦 */
+            width: 0;
+            height: 0;
+            font-size: 0;
+            border: solid 8px;
+            border-color: #fff #e7e7e7 #fff #fff;
+        }
+
+        .send-msg-right .arrow-right {
+            position: absolute;
+            top: 5px;
+            right: -16px;
+            /* 圆角的位置需要细心调试哦 */
+            width: 0;
+            height: 0;
+            font-size: 0;
+            border: solid 8px;
+            border-color: #fff #fff #fff #4c9ed9;
+        }
+    </style>
 </head>
 
-<body style="padding-top: 70px">
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body id="top" style="padding-top: 40px">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">WebChat</a>
             </div>
-            <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
+            <form id="form-login" class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <input id="username" name="username" type="text" class="form-control" placeholder="Username">
+                    <input id="password" name="password" type="text" class="form-control" placeholder="Password">
+                </div>
+                <button id="btn-login" type="submit" class="btn btn-success">Sign in</button>
+                <a href="/register" class="btn btn-link">Sign up</a>
+            </form>
+            <!--<p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>-->
+            <ul id="logged" class="nav navbar-nav navbar-right" style="display: none;">
+                <!--<li><a href="#">Link</a></li>-->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">nihao<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a id="sign-out" href="#">Sign out</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Welcome to WebChat</h1>
+            <p>There are lots of interesting people here. Talk to them!</p>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-primary" style="height: 510px;">
+                <div class="panel panel-info" style="height: 510px;">
                     <div class="panel-heading">
                         Chat
                     </div>
                     <div class="panel-body">
                         <div style="height: 400px; overflow-x:hidden; overflow-y:scroll">
                             <div id="message-list">
-                                <ul class="list-group">
-                                </ul>
                             </div>
                         </div>
                         <form action="#" id="form-chat">
@@ -53,43 +145,102 @@
                 </div>
             </div>
         </div>
-        <footer class="footer" style="padding-top: 10px; padding-bottom: 20px; border-top: 1px solid #eee;">
+        <footer class="footer" style="padding-top: 20px; padding-bottom: 20px; border-top: 1px solid #eee;">
             <p>&copy;2017 WebChat</p>
         </footer>
     </div>
     <!--container-->
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        window.username = null // 全局对象默认空,连接以后才有数据
         var socket = io('http://10.128.127.68:3000')
-        socket.on('connect', function () {
-            console.log(socket.id); // 'G5p5...'
-        });
+        // 验证登陆
+        $('#form-login').submit(checkLogin)
+        $('#btn-login').click(checkLogin)
         // 发送消息
         $('#form-chat').submit(sendMsg)
         $('#send').click(sendMsg)
+        // 登出
+        $('#sign-out').click(signOut)
         // 调试用
         socket.on('show', (data) => {
             console.log(data)
         })
         // 收到新消息显示
-        socket.on('news', (msg) => {
-            $('#message-list > ul').append(`<li class="list-group-item">${msg}</li>`)
+        socket.on('news', (data) => {
+            if (data.username == window.username) {
+                $('#message-list').append(
+                    `<div class="send-right">
+                    <div class="send-title">${data.username}</div>
+                    <div class="send-msg-right">
+                    ${data.msg}
+                    <div class="arrow-right"></div>
+                    </div>
+                </div>`
+                )
+            } else {
+                $('#message-list').append(
+                    `<div class="send-left">
+                    <div class="send-title">${data.username}</div>
+                    <div class="send-msg-left">
+                    ${data.msg}
+                    <div class="arrow-left"></div>
+                    </div>
+                </div>`
+                )
+            }
+
             var msgHeight = $('#message-list').height()
             $('#message-list').parent().scrollTop(msgHeight)
         })
         // 同步在线用户列表
         socket.on('syncUser', (onlines) => {
+            console.log('同步消息列表:' + onlines.toString())
             $('#room ul li').remove()
             for (let o of onlines) {
                 $('#room ul').append(`<li class="list-group-item">${o}</li>`)
             }
         })
 
+        socket.on('loginSuccess', (username) => {
+            window.username = username
+            console.log('loginSuccess')
+            $('#form-login').hide()
+            $('#logged').show()
+            $('#logged .dropdown > a').html(username + '<span class="caret"></span>')
+        })
+        socket.on('loginFailed', () => {
+            console.log('loginFaild')
+        })
+
+        function signOut() {
+            window.username = null
+            socket.emit('signOut')
+            $('#form-login').show()
+            $('#logged').hide()
+        }
+
+        // 发送信息
         function sendMsg() {
+            if (window.username == null) {
+                alert('请登录后重试')
+                return false
+            }
             msg = $('#msg').val()
             socket.emit('sendMsg', msg)
             $('#msg').val('') // 清空输入框
+            return false
+        }
+
+        // 验证登陆
+        function checkLogin() {
+            var user = {
+                username: $('#username').val(),
+                password: $('#password').val()
+            }
+            socket.emit('checkLogin', user)
             return false
         }
     </script>

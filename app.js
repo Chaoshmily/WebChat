@@ -3,7 +3,8 @@ const
     bodyParser = require('koa-bodyparser'), //解析post
     controller = require('./controllers'),
     serve = require('koa-static'), // 静态资源
-    model = require('./model') // 数据原型
+    model = require('./model'), // 数据原型
+    User = model.User
 Server = require('socket.io') //websocket
 var app = new Koa()
 var server = app.listen(3000)
@@ -42,39 +43,80 @@ app.use(controller())
  * online事件向所有在线用户发送现在在线的用户列表
  */
 var onlines = new Array() //存放在线用户
-var count = 0 //记录用户数量
 io.on('connection', async(socket) => { // 有用户接入分配一个线程去处理他的连接
-    console.log(socket.id)
-    socket.emit('show', `you are my ${++count} user`) // 向连接人发送你是第几个连接的
+    var oneUser = null
     await syncUser() // 同步在线用户数据
-    io.sockets.emit('syncUser', onlines) // 同步在线用户列表
-    io.sockets.emit('news', 'a new one join') // 有人加入就广播
-    socket.on('disconnect', () => { // 有人退出也广播
-        count--
-        io.sockets.emit('news', 'a user out')
+    io.sockets.emit('syncUser', onlines) // 广播在线用户列表
+    io.sockets.emit('news', {
+        username: '系统消息',
+        msg: 'new one join !'
+    }) // 有人加入就广播
+    socket.on('checkLogin', async(user) => {
+        oneUser = await selectOne(user)
+        if (oneUser != null) {
+            await editState(oneUser, true)
+            await syncUser() // 同步在线用户数据
+            io.sockets.emit('syncUser', onlines) // 广播在线用户列表
+            socket.emit('loginSuccess', user.username)
+        } else {
+            socket.emit('loginFailed')
+        }
     })
-    socket.on('sendMsg', (msg) => { // 广播用户发送的信息发送数据
+    socket.on('signOut', async() => {
+        if (oneUser != null) {
+            await editState(oneUser, false)
+        }
+        await syncUser()
+        io.sockets.emit('syncUser', onlines) // 同步在线用户列表
+    })
+    socket.on('disconnect', async() => { // 有人退出也广播
+        io.sockets.emit('news', 'a user out')
+        if (oneUser != null) {
+            await editState(oneUser, false)
+        }
+        await syncUser()
+        io.sockets.emit('syncUser', onlines) // 同步在线用户列表
+    })
+    socket.on('sendMsg', async(msg) => { // 广播用户发送的信息发送数据
         if (msg != '' && msg.trim() != '') {
             console.log(msg) //后台打印用户发送的消息
-            io.sockets.emit('news', msg)
+            let data = {
+                username: oneUser.username,
+                msg: msg
+            }
+            io.sockets.emit('news', data)
         }
     })
 })
 
 // 同步用户列表
 var syncUser = async() => {
-    var User = model.User
-    var online = await User.findAll({})
+    var online = await User.findAll({
+        where: {
+            online: true
+        }
+    })
     onlines = new Array()
     for (let o of online) {
         onlines.push(o.username.toString())
     }
+    console.log(JSON.stringify(onlines))
 }
 
 // 修改用户状态
-var editState = async(on) => {
-    var User = model.User
-    var u = await User.find({
-        // 
+var editState = async(oneUser, state) => {
+    oneUser.online = state
+    await oneUser.save()
+}
+
+
+// 查询用户
+var selectOne = async(user) => {
+    var oneUser = await User.findOne({
+        where: {
+            username: user.username,
+            password: user.password
+        }
     })
+    return oneUser
 }
