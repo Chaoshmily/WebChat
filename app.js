@@ -44,6 +44,7 @@ app.use(controller())
 var onlines = new Array() //存放在线用户
 var count = 0 //记录用户数量
 io.on('connection', async(socket) => { // 有用户接入分配一个线程去处理他的连接
+    console.log(socket.id)
     socket.emit('show', `you are my ${++count} user`) // 向连接人发送你是第几个连接的
     await syncUser() // 同步在线用户数据
     io.sockets.emit('syncUser', onlines) // 同步在线用户列表
@@ -68,4 +69,12 @@ var syncUser = async() => {
     for (let o of online) {
         onlines.push(o.username.toString())
     }
+}
+
+// 修改用户状态
+var editState = async(on) => {
+    var User = model.User
+    var u = await User.find({
+        // 
+    })
 }

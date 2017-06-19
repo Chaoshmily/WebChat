@@ -35,7 +35,8 @@ var User = sequelize.define('t_user', {
     username: Sequelize.STRING(20),
     password: Sequelize.STRING(20),
     email: Sequelize.STRING(40),
-    tel: Sequelize.STRING(20)
+    tel: Sequelize.STRING(20),
+    online: Sequelize.BOOLEAN,
 }, {
     timestamps: false
 })

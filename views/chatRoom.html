@@ -62,21 +62,26 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io('http://10.128.127.68:3000')
-        var msg
+        socket.on('connect', function () {
+            console.log(socket.id); // 'G5p5...'
+        });
+        // 发送消息
+        $('#form-chat').submit(sendMsg)
+        $('#send').click(sendMsg)
+        // 调试用
         socket.on('show', (data) => {
             console.log(data)
         })
+        // 收到新消息显示
         socket.on('news', (msg) => {
             $('#message-list > ul').append(`<li class="list-group-item">${msg}</li>`)
             var msgHeight = $('#message-list').height()
             $('#message-list').parent().scrollTop(msgHeight)
         })
-        $('#form-chat').submit(sendMsg)
-        $('#send').click(sendMsg)
-
+        // 同步在线用户列表
         socket.on('syncUser', (onlines) => {
             $('#room ul li').remove()
-            for(let o of onlines) {
+            for (let o of onlines) {
                 $('#room ul').append(`<li class="list-group-item">${o}</li>`)
             }
         })
