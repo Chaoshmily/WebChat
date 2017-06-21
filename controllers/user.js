@@ -33,6 +33,7 @@ fn_register = async(ctx, next) => {
 // 渲染检查用户注册成功与否页
 fn_checkRegister = async(ctx, next) => {
     var
+        nickname = ctx.request.body.nickname || '',
         username = ctx.request.body.username || '',
         password = ctx.request.body.password || '',
         repassword = ctx.request.body.repassword || '',
@@ -47,6 +48,7 @@ fn_checkRegister = async(ctx, next) => {
     console.log(users.length)
     if (users.length != 0) {
         ctx.render('register.html', {
+            nickname: nickname,
             username: username,
             password: password,
             repassword: repassword,
@@ -57,13 +59,14 @@ fn_checkRegister = async(ctx, next) => {
         })
     } else {
         var user = User.create({
+            nickname: nickname,
             username: username,
             password: password,
             email: email,
             tel: tel,
             online: false
         })
-        ctx.render('charRoom.html', {})
+        ctx.render('chatRoom.html', {})
     }
 }
 

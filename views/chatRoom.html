@@ -84,7 +84,7 @@
             <form id="form-login" class="navbar-form navbar-right" role="search">
                 <div class="form-group">
                     <input id="username" name="username" type="text" class="form-control" placeholder="Username">
-                    <input id="password" name="password" type="text" class="form-control" placeholder="Password">
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
                 </div>
                 <button id="btn-login" type="submit" class="btn btn-success">Sign in</button>
                 <a href="/register" class="btn btn-link">Sign up</a>
@@ -95,9 +95,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">nihao<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Base Information</a></li>
                         <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a id="sign-out" href="#">Sign out</a></li>
                     </ul>
@@ -115,7 +114,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-info" style="height: 510px;">
+                <div class="panel panel-default" style="height: 510px;">
                     <div class="panel-heading">
                         Chat
                     </div>
@@ -134,7 +133,7 @@
                 </div>
             </div>
             <div id="room" class="col-md-4">
-                <div class="panel panel-info" style="height: 510px;">
+                <div class="panel panel-default" style="height: 510px;">
                     <div class="panel-heading">
                         Room
                     </div>
@@ -148,6 +147,27 @@
         <footer class="footer" style="padding-top: 20px; padding-bottom: 20px; border-top: 1px solid #eee;">
             <p>&copy;2017 WebChat</p>
         </footer>
+        <!--模态框提示用户名密码错误-->
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">ERROR</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Incorrect username or password</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
     </div>
     <!--container-->
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
@@ -173,7 +193,7 @@
             if (data.username == window.username) {
                 $('#message-list').append(
                     `<div class="send-right">
-                    <div class="send-title">${data.username}</div>
+                    <div class="send-title">${data.nickname}</div>
                     <div class="send-msg-right">
                     ${data.msg}
                     <div class="arrow-right"></div>
@@ -204,15 +224,17 @@
             }
         })
 
-        socket.on('loginSuccess', (username) => {
-            window.username = username
+        socket.on('loginSuccess', (user) => {
+            window.username = user.username
             console.log('loginSuccess')
             $('#form-login').hide()
             $('#logged').show()
-            $('#logged .dropdown > a').html(username + '<span class="caret"></span>')
+            $('#logged .dropdown > a').html(user.nickname + '<span class="caret"></span>')
         })
+
         socket.on('loginFailed', () => {
             console.log('loginFaild')
+            $('#myModal').modal()
         })
 
         function signOut() {

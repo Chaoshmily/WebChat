@@ -32,6 +32,7 @@ var User = sequelize.define('t_user', {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
+    nickname: Sequelize.STRING(20),
     username: Sequelize.STRING(20),
     password: Sequelize.STRING(20),
     email: Sequelize.STRING(40),

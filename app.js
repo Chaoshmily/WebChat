@@ -57,7 +57,10 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
             await editState(oneUser, true)
             await syncUser() // 同步在线用户数据
             io.sockets.emit('syncUser', onlines) // 广播在线用户列表
-            socket.emit('loginSuccess', user.username)
+            socket.emit('loginSuccess', {
+                nickname: oneUser.nickname,
+                username: oneUser.username
+            })
         } else {
             socket.emit('loginFailed')
         }
@@ -70,7 +73,10 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
         io.sockets.emit('syncUser', onlines) // 同步在线用户列表
     })
     socket.on('disconnect', async() => { // 有人退出也广播
-        io.sockets.emit('news', 'a user out')
+        io.sockets.emit('news', {
+        username: '系统消息',
+        msg: 'a user out !'
+    })
         if (oneUser != null) {
             await editState(oneUser, false)
         }
@@ -82,6 +88,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
             console.log(msg) //后台打印用户发送的消息
             let data = {
                 username: oneUser.username,
+                nickname: oneUser.nickname,
                 msg: msg
             }
             io.sockets.emit('news', data)
@@ -98,7 +105,7 @@ var syncUser = async() => {
     })
     onlines = new Array()
     for (let o of online) {
-        onlines.push(o.username.toString())
+        onlines.push(o.nickname.toString())
     }
     console.log(JSON.stringify(onlines))
 }
