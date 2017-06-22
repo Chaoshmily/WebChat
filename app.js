@@ -48,8 +48,9 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     await syncUser() // 同步在线用户数据
     io.sockets.emit('syncUser', onlines) // 广播在线用户列表
     io.sockets.emit('news', {
-        username: '系统消息',
-        msg: 'new one join !'
+        nickname: '系统消息',
+        msg: 'new one join !',
+        username: '系统消息'
     }) // 有人加入就广播
     socket.on('checkLogin', async(user) => {
         oneUser = await selectOne(user)
@@ -59,7 +60,8 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
             io.sockets.emit('syncUser', onlines) // 广播在线用户列表
             socket.emit('loginSuccess', {
                 nickname: oneUser.nickname,
-                username: oneUser.username
+                username: oneUser.username,
+                password: oneUser.password
             })
         } else {
             socket.emit('loginFailed')
@@ -74,7 +76,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     })
     socket.on('disconnect', async() => { // 有人退出也广播
         io.sockets.emit('news', {
-        username: '系统消息',
+        nickname: '系统消息',
         msg: 'a user out !'
     })
         if (oneUser != null) {

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/bootstrap.css">
-    <title>Welcome</title>
+    <title>欢迎</title>
     <style>
         .send-left {
             padding-bottom: 10px;
@@ -79,26 +79,26 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">WebChat</a>
+                <a class="navbar-brand" href="#">网页聊天室</a>
             </div>
-            <form id="form-login" class="navbar-form navbar-right" role="search">
+            <form id="form-login" class="navbar-form navbar-right" role="search" method="post">
                 <div class="form-group">
-                    <input id="username" name="username" type="text" class="form-control" placeholder="Username">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
+                    <input id="username" name="username" type="text" class="form-control" placeholder="用户名">
+                    <input id="password" name="password" type="password" class="form-control" placeholder="密码">
                 </div>
-                <button id="btn-login" type="submit" class="btn btn-success">Sign in</button>
-                <a href="/register" class="btn btn-link">Sign up</a>
+                <button id="btn-login" type="submit" class="btn btn-success">登录</button>
+                <a href="/register" class="btn btn-link">注册</a>
             </form>
             <!--<p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>-->
             <ul id="logged" class="nav navbar-nav navbar-right" style="display: none;">
                 <!--<li><a href="#">Link</a></li>-->
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">nihao<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">你好<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Base Information</a></li>
-                        <li><a href="#">Another action</a></li>
+                        <li><a href="/baseInformation">个性名片</a></li>
+                        <li><a href="#">聊天记录</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a id="sign-out" href="#">Sign out</a></li>
+                        <li><a id="sign-out" href="#">退出</a></li>
                     </ul>
                 </li>
             </ul>
@@ -106,8 +106,8 @@
     </nav>
     <div class="jumbotron">
         <div class="container">
-            <h1>Welcome to WebChat</h1>
-            <p>There are lots of interesting people here. Talk to them!</p>
+            <h1>欢迎来到网页聊天室</h1>
+            <p>这里有许多有趣的人。让我们一起畅聊吧！</p>
         </div>
     </div>
 
@@ -116,7 +116,7 @@
             <div class="col-md-8">
                 <div class="panel panel-default" style="height: 510px;">
                     <div class="panel-heading">
-                        Chat
+                        聊天室
                     </div>
                     <div class="panel-body">
                         <div style="height: 400px; overflow-x:hidden; overflow-y:scroll">
@@ -125,8 +125,8 @@
                         </div>
                         <form action="#" id="form-chat">
                             <div class="input-group">
-                                <input type="text" id="msg" class="form-control" placeholder="Write some message">
-                                <span id="send" class="input-group-addon btn btn-primary">Send</span>
+                                <input type="text" id="msg" class="form-control" placeholder="写一些想要说的话">
+                                <span id="send" class="input-group-addon btn btn-primary">发送</span>
                             </div>
                         </form>
                     </div>
@@ -135,7 +135,7 @@
             <div id="room" class="col-md-4">
                 <div class="panel panel-default" style="height: 510px;">
                     <div class="panel-heading">
-                        Room
+                        房间
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
@@ -153,14 +153,14 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">ERROR</h4>
+                        <h4 class="modal-title">错误</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Incorrect username or password</p>
+                        <p>用户名或密码错误</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">好的</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -171,11 +171,22 @@
     </div>
     <!--container-->
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         window.username = null // 全局对象默认空,连接以后才有数据
         var socket = io('http://10.128.127.68:3000')
+        socket.on('connect', function () {
+            console.log(socket.id + '连接成功');
+            if ($.cookie('username') && $.cookie('password')) {
+                socket.emit('checkLogin', {
+                    username: $.cookie('username'),
+                    password: $.cookie('password')
+                })
+            }
+
+        });
         // 验证登陆
         $('#form-login').submit(checkLogin)
         $('#btn-login').click(checkLogin)
@@ -185,30 +196,30 @@
         // 登出
         $('#sign-out').click(signOut)
         // 调试用
-        socket.on('show', (data) => {
+        socket.on('show', function (data) {
             console.log(data)
         })
         // 收到新消息显示
-        socket.on('news', (data) => {
+        socket.on('news', function (data) {
             if (data.username == window.username) {
                 $('#message-list').append(
-                    `<div class="send-right">
-                    <div class="send-title">${data.nickname}</div>
-                    <div class="send-msg-right">
-                    ${data.msg}
-                    <div class="arrow-right"></div>
-                    </div>
-                </div>`
+                    '<div class="send-right">' +
+                    '<div class="send-title">' + data.nickname + '</div>' +
+                    '<div class="send-msg-right">' +
+                    data.msg +
+                    '<div class="arrow-right"></div>' +
+                    '</div>' +
+                    '</div>'
                 )
             } else {
                 $('#message-list').append(
-                    `<div class="send-left">
-                    <div class="send-title">${data.username}</div>
-                    <div class="send-msg-left">
-                    ${data.msg}
-                    <div class="arrow-left"></div>
-                    </div>
-                </div>`
+                    '<div class="send-left">' +
+                    '<div class="send-title">' + data.nickname + '</div>' +
+                    '<div class="send-msg-left">' +
+                    data.msg +
+                    '<div class="arrow-left"></div>' +
+                    '</div>' +
+                    '</div>'
                 )
             }
 
@@ -216,29 +227,33 @@
             $('#message-list').parent().scrollTop(msgHeight)
         })
         // 同步在线用户列表
-        socket.on('syncUser', (onlines) => {
+        socket.on('syncUser', function (onlines) {
             console.log('同步消息列表:' + onlines.toString())
             $('#room ul li').remove()
-            for (let o of onlines) {
-                $('#room ul').append(`<li class="list-group-item">${o}</li>`)
+            for (var o of onlines) {
+                $('#room ul').append('<li class="list-group-item">' + o + '</li>')
             }
         })
 
-        socket.on('loginSuccess', (user) => {
+        socket.on('loginSuccess', function (user) {
             window.username = user.username
+            $.cookie('username', user.username)
+            $.cookie('password', user.password)
             console.log('loginSuccess')
             $('#form-login').hide()
             $('#logged').show()
             $('#logged .dropdown > a').html(user.nickname + '<span class="caret"></span>')
         })
 
-        socket.on('loginFailed', () => {
+        socket.on('loginFailed', function () {
             console.log('loginFaild')
             $('#myModal').modal()
         })
 
         function signOut() {
             window.username = null
+            $.removeCookie('username')
+            $.removeCookie('password')
             socket.emit('signOut')
             $('#form-login').show()
             $('#logged').hide()

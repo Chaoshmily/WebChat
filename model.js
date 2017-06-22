@@ -42,7 +42,24 @@ var User = sequelize.define('t_user', {
     timestamps: false
 })
 
+var Base = sequelize.define('t_base', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
+    sex: Sequelize.BOOLEAN,
+    qq: Sequelize.STRING(20),
+    hobby: Sequelize.STRING(200),
+    say: Sequelize.STRING(200),
+    bc: Sequelize.STRING(20),
+    fc: Sequelize.STRING(20),
+    img: Sequelize.STRING(100),
+}, {
+    timestamps: false
+})
+
 module.exports = {
     "Pet": Pet,
-    "User": User
+    "User": User,
+    "Base": Base
 }

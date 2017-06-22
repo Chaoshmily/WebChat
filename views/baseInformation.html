@@ -12,6 +12,7 @@
       position: fixed;
       right: 4%;
       bottom: 4%;
+      width: 112px;
     }
 
     #show {
@@ -20,7 +21,7 @@
       left: 55%;
       top: 50%;
       padding: 10px;
-      transform: translateY(-50%);
+      transform: translateY(-45%);
       width: 300px;
       height: 500px;
       background-color: #e1effd;
@@ -48,7 +49,7 @@
       position: absolute;
       left: 15%;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-45%);
       width: 380px;
     }
 
@@ -63,7 +64,16 @@
   </style>
 </head>
 
-<body>
+<body style="padding-top: 70px">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">WebChat</a>
+      </div>
+    </div>
+  </nav>
+
+
   <!--操作-->
   <div id="operation">
     <button class="btn btn-success" type="">预览</button>
@@ -74,28 +84,59 @@
   <div id="edit" class="container">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <form action="#">
+        <form action="/save" method="post">
           <h1>交友名片</h1>
           <div class="form-group">
             <label for="nickname">昵称</label>
-            <input id="nickname" class="form-control" type="text" name="nickname" value="不爱吃橘子" disabled>
+            <input id="nickname" class="form-control" type="text" name="nickname" value="{{ nickname }}" readonly>
           </div>
           <div class="form-group">
-            <label for="sex">性别</label>
-            <input id="sex" class="form-control" type="text" name="sex" value="男" disabled>
+            <label>性别</label>
+            <div id="sex" class="radio">
+              <label><input type="radio" name="sex" value="true" {% if sex %}checked{% endif %} readonly>男</label>&emsp;
+              <label><input type="radio" name="sex" value="false" {% if sex %}{% else %}checked{% endif %} readonly>女</label>
+            </div>
           </div>
           <div class="form-group">
             <label for="qq">QQ</label>
-            <input id="qq" class="form-control" type="text" name="qq" value="792810880" disabled>
+            <input id="qq" class="form-control" type="text" name="qq" value="{{ qq }}" readonly>
           </div>
           <div class="form-group">
             <label for="hobby">爱好</label>
-            <input id="hobby" class="form-control" type="text" name="hobby" value="篮球" disabled>
+            <input id="hobby" class="form-control" type="text" name="hobby" value="{{ hobby }}" readonly>
           </div>
           <div class="form-group">
             <label for="say">交友宣言</label>
-            <input id="say" class="form-control" type="text" name="say" value="大家好才是真的好" disabled>
+            <input id="say" class="form-control" type="text" name="say" value="{{ say }}" readonly>
           </div>
+          <div class="form-group">
+            <label for="head-pic">头像</label>
+            <select id="head-pic" class="form-control" name="img">
+              <option value="image/background.jpg" {% if (img == 'image/background.jpg') %} selected {% endif %}>夕阳</option>
+              <option value="image/1.jpg" {% if (img == 'image/1.jpg') %} selected {% endif %}>动漫男头1</option>
+              <option value="image/2.jpg" {% if (img == 'image/2.jpg') %} selected {% endif %}>动漫男头2</option>
+              <option value="image/3.jpg" {% if (img == 'image/3.jpg') %} selected {% endif %}>动漫男头3</option>
+              <option value="image/4.jpg" {% if (img == 'image/4.jpg') %} selected {% endif %}>动漫女头1</option>
+              <option value="image/5.jpg" {% if (img == 'image/5.jpg') %} selected {% endif %}>动漫女头2</option>
+              <option value="image/6.gif" {% if (img == 'image/6.gif') %} selected {% endif %}>动头(可爱小女孩)</option>
+              <option value="image/7.gif" {% if (img == 'image/7.gif') %} selected {% endif %}>动头(打你头)</option>
+              <option value="image/8.gif" {% if (img == 'image/8.gif') %} selected {% endif %}>动头(纠结)</option>
+              <option value="image/9.gif" {% if (img == 'image/9.gif') %} selected {% endif %}>动头(睡觉吹气泡)</option>
+              <option value="image/10.gif" {% if (img == 'image/10.gif') %} selected {% endif %}>动头(害怕)</option>
+              <option value="image/11.gif" {% if (img == 'image/11.gif') %} selected {% endif %}>动头(青峰)</option>
+              <option value="image/12.gif" {% if (img == 'image/12.gif') %} selected {% endif %}>动头(五角星)</option>
+              <option value="image/13.gif" {% if (img == 'image/13.gif') %} selected {% endif %}>动头(奇怪佐助)</option>
+              <option value="image/14.gif" {% if (img == 'image/14.gif') %} selected {% endif %}>动头(可爱雏田)</option>
+              <option value="image/15.gif" {% if (img == 'image/15.gif') %} selected {% endif %}>动头(搓个螺旋丸打他)</option>
+              <option value="image/16.gif" {% if (img == 'image/16.gif') %} selected {% endif %}>动头(装逼佐助)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>字体颜色：<span id="f-c">{{ fc }}</span>&emsp;&emsp;背景颜色：<span id="b-c">{{ bc }}</span></label>
+            <input type="hidden" name="fc" id="f-c1" value="{{ fc }}">
+            <input type="hidden" name="bc" id="b-c1" value="{{ bc }}">
+          </div>
+          <button type="submit" class="btn btn-primary">提交</button>
         </form>
       </div>
     </div>
@@ -174,13 +215,13 @@
   </div>
   <!--交友名片预览-->
   <div id="show" class="display">
-    <img id="head-img" src="../static/image/background.jpg" alt="bg" class="img-circle">
+    <img id="head-img" src="image/background.jpg" alt="bg" class="img-circle">
     <div id="base">
       <div title="昵称">昵称：<span id="s-nickname"></span></div>
       <div title="性别">性别：<span id="s-sex"></span></div>
       <div title="QQ">QQ：<span id="s-qq"></span></div>
-      <div title="爱好">爱好：</span><span id="s-hobby"></span></div>
-      <div title="交友宣言">交友宣言：</span><span id="s-say"></span></div>
+      <div title="爱好">爱好：<span id="s-hobby"></span></div>
+      <div title="交友宣言">交友宣言：<span id="s-say"></span></div>
     </div>
   </div>
 
@@ -191,10 +232,11 @@
     // 点击修改、保存
     $('#operation > button:nth-child(2)').click(function () {
       if ($(this).text() == '修改') {
-        $('input').removeAttr('disabled')
+        $('input').removeAttr('readonly')
         $(this).text('保存')
       } else {
-        $('input').attr('disabled', '')
+
+        $('input').attr('readonly', '')
         $(this).text('修改')
       }
     })
@@ -202,17 +244,20 @@
     $('#operation > button:nth-child(1)').click(function () {
       data = {
         nickname: $('#nickname').val(),
-        sex: $('#sex').val(),
+        sex: ($('#sex input:checked').val() == 'true') ? '男' : '女', //$('#sex').val(),
         qq: $('#qq').val(),
         hobby: $('#hobby').val(),
         say: $('#say').val(),
+        head: $('#head-pic').val()
       }
       $('#s-nickname').text(data.nickname)
       $('#s-qq').text(data.qq)
       $('#s-sex').text(data.sex)
       $('#s-hobby').text(data.hobby)
       $('#s-say').text(data.say)
+      $('#head-img').attr('src', data.head)
       console.log(data)
+       $('#operation > button:nth-child(2)').toggle()
       $('#edit').toggle()
       $('.display').toggle()
       if ($(this).text() == '预览') {
@@ -224,12 +269,16 @@
 
     // 给颜色赋值
     function initColor() {
+      $('#f-c').text($('#show').css('color'))
+      $('#b-c').text($('#show').css('background-color'))
+      $('#f-c1').val($('#show').css('color'))
+      $('#b-c1').val($('#show').css('background-color'))
       var check = false;
       var red = ['0', '85', '170', '255'];
       var green = ['0', '85', '170', '255'];
       var blue = ['0', '85', '170', '255'];
       var $color = $('.color');
-      for (let i = 0; i < $color.length; i++) {
+      for (var i = 0; i < $color.length; i++) {
         $color.eq(i).css('background-color', 'rgb(' + red[parseInt(i / 16)] + ',' + green[parseInt(i / 4 % 4)] + ',' +
           blue[parseInt(i % 4)] + ')')
       }
@@ -241,11 +290,14 @@
       })
       $('.color').click(function () {
         if (check) {
+          $('#f-c1').val($(this).css('background-color'))
+          $('#f-c').text($(this).css('background-color'))
           $('#show').css('color', $(this).css('background-color'))
         } else {
+          $('#b-c1').val($(this).css('background-color'))
+          $('#b-c').text($(this).css('background-color'))
           $('#show').css('background-color', $(this).css('background-color'))
         }
-
       })
     }
     initColor()
