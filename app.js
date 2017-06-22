@@ -49,7 +49,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     io.sockets.emit('syncUser', onlines) // 广播在线用户列表
     io.sockets.emit('news', {
         nickname: '系统消息',
-        msg: 'new one join !',
+        msg: '有新用户加入房间!',
         username: '系统消息'
     }) // 有人加入就广播
     socket.on('checkLogin', async(user) => {
@@ -77,7 +77,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     socket.on('disconnect', async() => { // 有人退出也广播
         io.sockets.emit('news', {
         nickname: '系统消息',
-        msg: 'a user out !'
+        msg: '有用户退出房间!'
     })
         if (oneUser != null) {
             await editState(oneUser, false)
