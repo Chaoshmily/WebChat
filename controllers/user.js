@@ -40,13 +40,25 @@ fn_checkRegister = async(ctx, next) => {
         email = ctx.request.body.email || '',
         tel = ctx.request.body.tel || '',
         User = model.User;
-    var users = await User.findAll({ // 查询用户是否存在
+    Base = model.Base;
+    var usersU = await User.findAll({ // 查询用户是否存在
         where: {
             username: username
         }
     })
-    console.log(users.length)
-    if (users.length != 0) {
+    var usersN = await User.findAll({ // 查询用户是否存在
+        where: {
+            nickname: nickname
+        }
+    })
+    var error = ''
+    if (usersU.length != 0) {
+        error += '用户名已存在   '
+    }
+    if (usersN.length != 0) {
+        error += '昵称已存在'
+    }
+    if (error != '') {
         ctx.render('register.html', {
             nickname: nickname,
             username: username,
@@ -54,11 +66,11 @@ fn_checkRegister = async(ctx, next) => {
             repassword: repassword,
             email: email,
             tel: tel,
-            error: "用户名已存在",
+            error: error,
             init: 'init()'
         })
     } else {
-        var user = User.create({
+        var user = await User.create({
             nickname: nickname,
             username: username,
             password: password,
@@ -66,7 +78,24 @@ fn_checkRegister = async(ctx, next) => {
             tel: tel,
             online: false
         })
-        ctx.render('chatRoom.html', {})
+        var oneUser = await User.findOne({
+            where: {
+                username: user.username,
+                password: user.password
+            }
+        })
+        var base = await Base.create({
+            id: oneUser.id,
+            sex: true,
+            qq: '',
+            say: '',
+            bc: 'rgb(225, 239, 253)',
+            fc: 'rgb(51, 51, 51)',
+            img: '/image/background.jpg'
+        })
+        ctx.render('success.html', {
+            event: '注册'
+        })
     }
 }
 

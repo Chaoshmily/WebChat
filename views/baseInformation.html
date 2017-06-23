@@ -112,23 +112,23 @@
           <div class="form-group">
             <label for="head-pic">头像</label>
             <select id="head-pic" class="form-control" name="img">
-              <option value="image/background.jpg" {% if (img == 'image/background.jpg') %} selected {% endif %}>夕阳</option>
-              <option value="image/1.jpg" {% if (img == 'image/1.jpg') %} selected {% endif %}>动漫男头1</option>
-              <option value="image/2.jpg" {% if (img == 'image/2.jpg') %} selected {% endif %}>动漫男头2</option>
-              <option value="image/3.jpg" {% if (img == 'image/3.jpg') %} selected {% endif %}>动漫男头3</option>
-              <option value="image/4.jpg" {% if (img == 'image/4.jpg') %} selected {% endif %}>动漫女头1</option>
-              <option value="image/5.jpg" {% if (img == 'image/5.jpg') %} selected {% endif %}>动漫女头2</option>
-              <option value="image/6.gif" {% if (img == 'image/6.gif') %} selected {% endif %}>动头(可爱小女孩)</option>
-              <option value="image/7.gif" {% if (img == 'image/7.gif') %} selected {% endif %}>动头(打你头)</option>
-              <option value="image/8.gif" {% if (img == 'image/8.gif') %} selected {% endif %}>动头(纠结)</option>
-              <option value="image/9.gif" {% if (img == 'image/9.gif') %} selected {% endif %}>动头(睡觉吹气泡)</option>
-              <option value="image/10.gif" {% if (img == 'image/10.gif') %} selected {% endif %}>动头(害怕)</option>
-              <option value="image/11.gif" {% if (img == 'image/11.gif') %} selected {% endif %}>动头(青峰)</option>
-              <option value="image/12.gif" {% if (img == 'image/12.gif') %} selected {% endif %}>动头(五角星)</option>
-              <option value="image/13.gif" {% if (img == 'image/13.gif') %} selected {% endif %}>动头(奇怪佐助)</option>
-              <option value="image/14.gif" {% if (img == 'image/14.gif') %} selected {% endif %}>动头(可爱雏田)</option>
-              <option value="image/15.gif" {% if (img == 'image/15.gif') %} selected {% endif %}>动头(搓个螺旋丸打他)</option>
-              <option value="image/16.gif" {% if (img == 'image/16.gif') %} selected {% endif %}>动头(装逼佐助)</option>
+              <option value="/image/background.jpg" {% if (img == 'image/background.jpg') %} selected {% endif %}>夕阳</option>
+              <option value="/image/1.jpg" {% if (img == '/image/1.jpg') %} selected {% endif %}>动漫男头1</option>
+              <option value="/image/2.jpg" {% if (img == '/image/2.jpg') %} selected {% endif %}>动漫男头2</option>
+              <option value="/image/3.jpg" {% if (img == '/image/3.jpg') %} selected {% endif %}>动漫男头3</option>
+              <option value="/image/4.jpg" {% if (img == '/image/4.jpg') %} selected {% endif %}>动漫女头1</option>
+              <option value="/image/5.jpg" {% if (img == '/image/5.jpg') %} selected {% endif %}>动漫女头2</option>
+              <option value="/image/6.gif" {% if (img == '/image/6.gif') %} selected {% endif %}>动头(可爱小女孩)</option>
+              <option value="/image/7.gif" {% if (img == '/image/7.gif') %} selected {% endif %}>动头(打你头)</option>
+              <option value="/image/8.gif" {% if (img == '/image/8.gif') %} selected {% endif %}>动头(纠结)</option>
+              <option value="/image/9.gif" {% if (img == '/image/9.gif') %} selected {% endif %}>动头(睡觉吹气泡)</option>
+              <option value="/image/10.gif" {% if (img == '/image/10.gif') %} selected {% endif %}>动头(害怕)</option>
+              <option value="/image/11.gif" {% if (img == '/image/11.gif') %} selected {% endif %}>动头(青峰)</option>
+              <option value="/image/12.gif" {% if (img == '/image/12.gif') %} selected {% endif %}>动头(五角星)</option>
+              <option value="/image/13.gif" {% if (img == '/image/13.gif') %} selected {% endif %}>动头(奇怪佐助)</option>
+              <option value="/image/14.gif" {% if (img == '/image/14.gif') %} selected {% endif %}>动头(可爱雏田)</option>
+              <option value="/image/15.gif" {% if (img == '/image/15.gif') %} selected {% endif %}>动头(搓个螺旋丸打他)</option>
+              <option value="/image/16.gif" {% if (img == '/image/16.gif') %} selected {% endif %}>动头(装逼佐助)</option>
             </select>
           </div>
           <div class="form-group">
@@ -233,7 +233,7 @@
     $('#operation > button:nth-child(2)').click(function () {
       if ($(this).text() == '修改') {
         $('input').removeAttr('readonly')
-        $(this).text('保存')
+        $(this).text('返回')
       } else {
 
         $('input').attr('readonly', '')
@@ -248,7 +248,9 @@
         qq: $('#qq').val(),
         hobby: $('#hobby').val(),
         say: $('#say').val(),
-        head: $('#head-pic').val()
+        head: $('#head-pic').val(),
+        bc: $('#b-c').text(),
+        fc: $('#f-c').text()
       }
       $('#s-nickname').text(data.nickname)
       $('#s-qq').text(data.qq)
@@ -256,6 +258,8 @@
       $('#s-hobby').text(data.hobby)
       $('#s-say').text(data.say)
       $('#head-img').attr('src', data.head)
+      $('#show').css('color', data.fc)
+      $('#show').css('background-color', data.bc)
       console.log(data)
        $('#operation > button:nth-child(2)').toggle()
       $('#edit').toggle()
@@ -269,10 +273,6 @@
 
     // 给颜色赋值
     function initColor() {
-      $('#f-c').text($('#show').css('color'))
-      $('#b-c').text($('#show').css('background-color'))
-      $('#f-c1').val($('#show').css('color'))
-      $('#b-c1').val($('#show').css('background-color'))
       var check = false;
       var red = ['0', '85', '170', '255'];
       var green = ['0', '85', '170', '255'];

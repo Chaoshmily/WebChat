@@ -20,7 +20,7 @@ iForm.onsubmit = function () {
     if (flag) {
         return true
     } else {
-        alert('提交失败');
+        $('#myModal').modal()
         return false
     }
 }
@@ -38,7 +38,7 @@ iButton[0].onclick = function () {
     if (flag) {
         return true
     } else {
-        alert('提交失败');
+         $('#myModal').modal()
         return false
     }
 }
@@ -46,7 +46,7 @@ iButton[0].onclick = function () {
 // 初始化
 function init() {
     check(iNickName, '昵称可用', '请输入4-16之间的字符数');
-    check(iName, '名称可用', '请输入4-16之间的字符数');
+    check(iName, '名称可用', '请输入4-16之间的字符数', 'username');
     check(iPassword, '密码可用', '请输入4-16之间的字符数');
     check(iRepassword, '密码可用', '请输入4-16之间的字符数', 'repassword');
     check(iEmail, '邮箱可用', '错误的邮箱', 'email');
@@ -62,19 +62,19 @@ iNickName[0].onblur = function () {
 }
 
 iName[0].onfocus = function () {
-    iName[1].innerHTML = '必填，长度为4~16个字符';
+    iName[1].innerHTML = '必填，由4~16个英文和数字组成';
 }
 
 iName[0].onblur = function () {
-    check(iName, '用户名可用', '请输入4-16之间的字符数');
+    check(iName, '用户名可用', '请输入4-16之间的英文和数字','username');
 }
 
 iPassword[0].onfocus = function () {
-    iPassword[1].innerHTML = '必填，长度为4~16个字符';
+    iPassword[1].innerHTML = '必填，由4~16个英文和数字组成';
 }
 
 iPassword[0].onblur = function () {
-    check(iPassword, '密码可用', '请输入4-16之间的字符数')
+    check(iPassword, '密码可用', '请输入4-16之间的英文和数字', 'password')
 }
 
 iRepassword[0].onfocus = function () {
@@ -167,6 +167,42 @@ function check(ele, sucMsg, failMsg, type) {
                 ele[1].className += ' success';
             } else {
                 ele[1].innerHTML = '请输入正确的手机号';
+                havaClass(ele[0], 'fail');
+                havaClass(ele[1], 'fail');
+                havaClass(ele[0], 'success');
+                havaClass(ele[1], 'success');
+                ele[0].className += ' fail';
+                ele[1].className += ' fail';
+            }
+        } else if (type == 'username') {
+            if (RegExp('^[A-Za-z0-9]+$', 'g').test(ele[0].value)) {
+                ele[1].innerHTML = sucMsg;
+                havaClass(ele[0], 'fail');
+                havaClass(ele[1], 'fail');
+                havaClass(ele[0], 'success');
+                havaClass(ele[1], 'success');
+                ele[0].className += ' success';
+                ele[1].className += ' success';
+            } else {
+                ele[1].innerHTML = '请输入正确的用户名';
+                havaClass(ele[0], 'fail');
+                havaClass(ele[1], 'fail');
+                havaClass(ele[0], 'success');
+                havaClass(ele[1], 'success');
+                ele[0].className += ' fail';
+                ele[1].className += ' fail';
+            }
+        } else if (type == 'password') {
+            if (RegExp('^[A-Za-z0-9]+$', 'g').test(ele[0].value)) {
+                ele[1].innerHTML = sucMsg;
+                havaClass(ele[0], 'fail');
+                havaClass(ele[1], 'fail');
+                havaClass(ele[0], 'success');
+                havaClass(ele[1], 'success');
+                ele[0].className += ' success';
+                ele[1].className += ' success';
+            } else {
+                ele[1].innerHTML = '请输入正确的密码';
                 havaClass(ele[0], 'fail');
                 havaClass(ele[1], 'fail');
                 havaClass(ele[0], 'success');

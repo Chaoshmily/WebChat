@@ -69,10 +69,44 @@ fn_save = async(ctx, next) => {
     base[0].fc = fc
     base[0].img = img
     base[0].save()
-    ctx.response.body = '成功'
+    ctx.render('success.html', {
+        event: '提交基本信息'
+    })
+}
+
+fn_show = async(ctx, next) => {
+    var
+        nickname = ctx.params.nickname,
+        User = model.User,
+        Base = model.Base
+    var users = await User.findAll({
+        where: {
+            nickname: nickname
+        }
+    })
+    if (users.length == 1) {
+        var base = await Base.findAll({
+            where: {
+                id: users[0].id
+            }
+        })
+        ctx.render('show.html', {
+            nickname: users[0].nickname,
+            sex: base[0].sex,
+            qq: base[0].qq,
+            hobby: base[0].hobby,
+            say: base[0].say,
+            bc: base[0].bc,
+            fc: base[0].fc,
+            img: base[0].img
+        })
+    } else {
+        console.log(users.length)
+    }
 }
 
 module.exports = {
     'GET /baseInformation': fn_base,
     'POST /save': fn_save,
+    'GET /show/:nickname': fn_show
 }

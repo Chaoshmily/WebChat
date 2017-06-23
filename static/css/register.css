@@ -1,9 +1,7 @@
 body {
-    background: #eee;
-    background-image: url('/image/background.jpg');
 }
 
-form {
+/*#form {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -13,7 +11,7 @@ form {
     padding: 40px;
     background: rgba(255, 255, 255, .8);
     border-radius: 20px;
-}
+}*/
 
 .check {
     margin-bottom: 10px;
