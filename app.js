@@ -4,7 +4,8 @@ const
     controller = require('./controllers'),
     serve = require('koa-static'), // 静态资源
     model = require('./model'), // 数据原型
-    User = model.User
+    User = model.User,
+    Chat = model.Chat
 Server = require('socket.io') //websocket
 var app = new Koa()
 var server = app.listen(3000)
@@ -76,9 +77,9 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     })
     socket.on('disconnect', async() => { // 有人退出也广播
         io.sockets.emit('news', {
-        nickname: '系统消息',
-        msg: '有用户退出房间!'
-    })
+            nickname: '系统消息',
+            msg: '有用户退出房间!'
+        })
         if (oneUser != null) {
             await editState(oneUser, false)
         }
@@ -94,6 +95,11 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
                 msg: msg
             }
             io.sockets.emit('news', data)
+            var chat = await Chat.create({
+                sendTime: new Date().getTime(),
+                content: msg,
+                userId: oneUser.id
+            })
         }
     })
 })

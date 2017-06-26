@@ -58,8 +58,21 @@ var Base = sequelize.define('t_base', {
     timestamps: false
 })
 
+var Chat = sequelize.define('t_chatlog', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
+    sendTime: Sequelize.BIGINT,
+    content: Sequelize.STRING(1000),
+    userId: Sequelize.INTEGER
+}, {
+    timestamps: false
+})
+
 module.exports = {
     "Pet": Pet,
     "User": User,
-    "Base": Base
+    "Base": Base,
+    "Chat": Chat
 }

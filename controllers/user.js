@@ -1,4 +1,4 @@
-model = require('../model') // 数据原型
+var model = require('../model') // 数据原型
 
 // 渲染登陆页
 fn_login = async(ctx, next) => {

@@ -1,4 +1,4 @@
-model = require('../model') // 数据原型
+var model = require('../model') // 数据原型
 
 fn_base = async(ctx, next) => {
     var
