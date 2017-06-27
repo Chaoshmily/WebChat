@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>新用户注册</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+</head>
+
+<body style="padding-top: 70px;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a id="index" class="navbar-brand" href="/">网页聊天室</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="col-sm-offset-2 page-header">
+            <h1>管理员 <small>登录</small></h1>
+        </div>
+        <form class="form-horizontal" action="/signAdmin/1" method="post">
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">用户名</label>
+                <div class="col-sm-8">
+                    <input id="username" class="username form-control" name="username" type="text" value="{{ username }}">
+                    <span class="username check"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-8">
+                    <input id="password" class="password form-control" name="password" type="password" value="{{ password }}">
+                    <span class="password check"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <p>{{ error }}</p>
+                    <button id="login" type="submit" class="btn btn-success">登录</button>
+                    <a href="/" class="btn btn-default">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script>
+        $('#login').click(function () {
+            $.removeCookie('username')
+            $.removeCookie('password')
+            $.cookie('username', $('#username').val())
+            $.cookie('password', $('#password').val())
+        })
+        $('form').submit(function () {
+            $.removeCookie('username')
+            $.removeCookie('password')
+            $.cookie('username', $('#username').val())
+            $.cookie('password', $('#password').val())
+        })
+        $('#index').click(function() {
+            $.removeCookie('username')
+            $.removeCookie('password')
+        })
+    </script>
+</body>
+
+</html>
