@@ -27,7 +27,7 @@ function showPageCommon(config) {
         }
 
         if (page < total) {
-            str = `${str}<li><a href="${total}">${total}</a></li><li><a href="./${page + 1}">下一页</a></li>`
+            str = `${str}<li><a href="./${total}">${total}</a></li><li><a href="./${page + 1}">下一页</a></li>`
             // str + total + '下一页';
         }
         return str;

@@ -194,6 +194,28 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    <!--模态框提示用户被封停-->
+    <div id="myModal2" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">错误</h4>
+                </div>
+                <div class="modal-body">
+                    <p>抱歉，您的账户已被封停，请联系管理员进行解封！</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">好的</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     <!--模态框提示用户未登录-->
     <div id="myModal1" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -231,7 +253,6 @@
                     password: $.cookie('password')
                 })
             }
-
         });
         // 验证登陆
         $('#form-login').submit(checkLogin)
@@ -292,9 +313,16 @@
             $('#logged .dropdown > a').html(user.nickname + '<span class="caret"></span>')
         })
 
-        socket.on('loginFailed', function () {
+        socket.on('loginFailed', function (data) {
+            $.removeCookie('username')
+            $.removeCookie('password')
             console.log('loginFaild')
-            $('#myModal').modal()
+            if (data == 2) {
+                $('#myModal2').modal()
+            } else {
+                $('#myModal').modal()
+            }
+
         })
 
         function signOut() {

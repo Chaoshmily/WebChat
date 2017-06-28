@@ -56,20 +56,25 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     socket.on('checkLogin', async(user) => {
         oneUser = await selectOne(user)
         if (oneUser != null) {
-            await editState(oneUser, true)
-            await syncUser() // 同步在线用户数据
-            io.sockets.emit('syncUser', onlines) // 广播在线用户列表
-            socket.emit('loginSuccess', {
-                nickname: oneUser.nickname,
-                username: oneUser.username,
-                password: oneUser.password
-            })
+            if (oneUser.online == 2) {
+                socket.emit('loginFailed', '2')
+            } else {
+                await editState(oneUser, true)
+                await syncUser() // 同步在线用户数据
+                io.sockets.emit('syncUser', onlines) // 广播在线用户列表
+                socket.emit('loginSuccess', {
+                    nickname: oneUser.nickname,
+                    username: oneUser.username,
+                    password: oneUser.password
+                })
+            }
+
         } else {
             socket.emit('loginFailed')
         }
     })
     socket.on('signOut', async() => {
-        if (oneUser != null) {
+        if (oneUser != null && oneUser.online != 2) {
             await editState(oneUser, false)
         }
         await syncUser()
@@ -80,7 +85,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
             nickname: '系统消息',
             msg: '有用户退出房间!'
         })
-        if (oneUser != null) {
+        if (oneUser != null && oneUser.online != 2) {
             await editState(oneUser, false)
         }
         await syncUser()
