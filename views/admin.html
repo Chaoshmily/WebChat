@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <title>用户管理 </title>
     <style>
+        body {
+            padding-top: 70px;
+        }
+
         tr>th:nth-of-type(1),
         tr>td:nth-of-type(1) {
             width: 50px;
@@ -37,7 +41,7 @@
     </style>
 </head>
 
-<body style="padding-top: 70px">
+<body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -78,68 +82,67 @@
         </table>
     </div>
     <div id="page"></div>
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
-    <script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.cookie.min.js"></script>
     <script>
-        function showPageCommon(config) {
-            return function (page, total) {
-                var str = `<li class="active"><a href="/signAdmin/${page}">${page}</a></li>`
+    function showPageCommon(config) {
+    return function (page, total) {
+        var str = `<li class="active"><a href="/signAdmin/${page}">${page}</a></li>`;
 
-                for (var i = 1; i <= 3; i++) {
-                    if (page - i > 1) {
-                        str = `<li><a href="/signAdmin/${page - i}" class="${config.color}">${page - i}</a></li>${str}`;
-                        // '<a class="' + config.color + '">' + (page - i) + '</a>' + str;
-                    }
-                    if (page + i < total) {
-                        str = `${str}<li><a href="/signAdmin/${page + i}" class="${config.color}">${page + i}</a></li>`
-                        // str = str + '<a class=">' + config.color + '">' + (page + i) + '</a>';
-                    }
-                }
-
-                if (page - 4 > 1) {
-                    str = '<li><a href="#">...</a></li>' + str;
-                }
-
-                if (page > 1) {
-                    str = `<li><a href="/signAdmin/${page - 1}">上一页</a></li><li><a href="/signAdmin/1">1</a></li>${str}`
-                    // '上一页' + 1 + str;
-                }
-
-                if (page + 4 < total) {
-                    str = str + `<li><a href="#">...</a><li>`;
-                }
-
-                if (page < total) {
-                    str = `${str}<li><a href="/signAdmin/${total}">${total}</a></li><li><a href="/signAdmin/${page + 1}">下一页</a></li>`
-                    // str + total + '下一页';
-                }
-                return str;
+        for (var i = 1; i <= 3; i++) {
+            if (page - i > 1) {
+                str = `<li><a href="/signAdmin/${page - i}" class="${config.color}">${page - i}</a></li>${str}`;
+                // '<a class="' + config.color + '">' + (page - i) + '</a>' + str;
+            }
+            if (page + i < total) {
+                str = `${str}<li><a href="/signAdmin/${page + i}" class="${config.color}">${page + i}</a></li>`;
+                // str = str + '<a class=">' + config.color + '">' + (page + i) + '</a>';
             }
         }
 
-        var showPage = showPageCommon({
-            color: 'red'
-        });
+        if (page - 4 > 1) {
+            str = '<li><a href="#">...</a></li>' + str;
+        }
 
-        {{ script }}
-        $('#page').append(
-            `
+        if (page > 1) {
+            str = `<li><a href="/signAdmin/${page - 1}">上一页</a></li><li><a href="/signAdmin/1">1</a></li>${str}`;
+            // '上一页' + 1 + str;
+        }
+
+        if (page + 4 < total) {
+            str = str + `<li><a href="#">...</a><li>`;
+        }
+
+        if (page < total) {
+            str = `${str}<li><a href="/signAdmin/${total}">${total}</a></li><li><a href="/signAdmin/${page + 1}">下一页</a></li>`;
+            // str + total + '下一页';
+        }
+        return str;
+    }
+}
+
+var showPage = showPageCommon();
+
+{{ script }}
+$('#page').append(
+    `
         <nav aria-label="Page navigation" class="text-center">
             <ul class="pagination">
                 ${ret}
             </ul>
-        </nav>`
-        )
-        $('#out').click(function () {
-            $.removeCookie('ausername')
-            $.removeCookie('apassword')
-            window.location.href = '/admin'
-        })
-        $('#index').click(function () {
-            $.removeCookie('ausername')
-            $.removeCookie('apassword')
-            window.location.href = '/admin'
-        })
+        </nav>
+        `
+);
+$('#out').click(function () {
+    $.removeCookie('ausername');
+    $.removeCookie('apassword');
+    window.location.href = '/admin';
+})
+$('#index').click(function () {
+    $.removeCookie('ausername');
+    $.removeCookie('apassword');
+    window.location.href = '/admin';
+})
     </script>
 </body>
 

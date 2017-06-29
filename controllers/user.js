@@ -49,18 +49,18 @@ fn_checkRegister = async(ctx, next) => {
         where: {
             username: username
         }
-    })
+    });
     var usersN = await User.findAll({ // 查询用户是否存在
         where: {
             nickname: nickname
         }
-    })
-    var error = ''
+    });
+    var error = '';
     if (usersU.length != 0) {
-        error += '用户名已存在   '
+        error += '用户名已存在   ';
     }
     if (usersN.length != 0) {
-        error += '昵称已存在'
+        error += '昵称已存在';
     }
     if (error != '') {
         ctx.render('register.html', {
@@ -72,7 +72,7 @@ fn_checkRegister = async(ctx, next) => {
             tel: tel,
             error: error,
             init: 'init()'
-        })
+        });
     } else {
         var user = await User.create({
             nickname: nickname,
@@ -81,13 +81,13 @@ fn_checkRegister = async(ctx, next) => {
             email: email,
             tel: tel,
             online: false
-        })
+        });
         var oneUser = await User.findOne({
             where: {
                 username: user.username,
                 password: user.password
             }
-        })
+        });
         var base = await Base.create({
             id: oneUser.id,
             sex: true,
@@ -96,10 +96,10 @@ fn_checkRegister = async(ctx, next) => {
             bc: 'rgb(225, 239, 253)',
             fc: 'rgb(51, 51, 51)',
             img: '/image/background.jpg'
-        })
+        });
         ctx.render('success.html', {
             event: '注册'
-        })
+        });
     }
 }
 
@@ -108,46 +108,4 @@ module.exports = {
     'POST /signin': fn_signin,
     'GET /register': fn_register,
     'POST /checkRegister': fn_checkRegister
-}
-
-// (async() => {
-//     var user = await User.create({
-//         username: username,
-//         password: password,
-//         email: email,
-//         tel: tel
-//     })
-//     console.log('created: ' + JSON.stringify(user))
-// })()
-
-// var
-//     now = Date.now(),
-//     Pet = model.Pet
-// console.log(now)
-
-// ;
-// (async() => {
-//     var dog = await Pet.create({
-//         id: 'd-' + now,
-//         name: 'Odie',
-//         gender: false,
-//         birth: '2008-08-08',
-//         createdAt: now,
-//         updatedAt: now,
-//         version: 0
-//     })
-//     console.log('created: ' + JSON.stringify(dog))
-// })()
-
-// ;
-// (async() => {
-//     var pets = await Pet.findAll({
-//         where: {
-//             name: 'Odie'
-//         }
-//     });
-//     console.log(`find ${pets.length} pets:`);
-//     for (let p of pets) {
-//         console.log(JSON.stringify(p, null, '  '))
-//     }
-// })()
+};
