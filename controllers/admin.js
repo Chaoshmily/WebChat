@@ -4,8 +4,8 @@ fn_admin = async(ctx, next) => {
     var Admin = model.Admin
     var User = model.User
     var page = ctx.params.page
-    var username = ctx.cookies.get('username') || ctx.request.body.username || ''
-    var password = ctx.cookies.get('password') || ctx.request.body.password || ''
+    var username = ctx.cookies.get('ausername') || ctx.request.body.username || ''
+    var password = ctx.cookies.get('apassword') || ctx.request.body.password || ''
     var admins = await Admin.findAll({
         where: {
             username: username,
@@ -59,8 +59,8 @@ fn_close = async(ctx, next) => {
     var User = model.User
     var id = ctx.params.id
     var page = 1
-    var username = ctx.cookies.get('username') || ctx.request.body.username || ''
-    var password = ctx.cookies.get('password') || ctx.request.body.password || ''
+    var username = ctx.cookies.get('ausername') || ctx.request.body.username || ''
+    var password = ctx.cookies.get('apassword') || ctx.request.body.password || ''
     var admins = await Admin.findAll({
         where: {
             username: username,
@@ -116,8 +116,8 @@ fn_open = async(ctx, next) => {
     var User = model.User
     var id = ctx.params.id
     var page = 1
-    var username = ctx.cookies.get('username') || ctx.request.body.username || ''
-    var password = ctx.cookies.get('password') || ctx.request.body.password || ''
+    var username = ctx.cookies.get('ausername') || ctx.request.body.username || ''
+    var password = ctx.cookies.get('apassword') || ctx.request.body.password || ''
     var admins = await Admin.findAll({
         where: {
             username: username,

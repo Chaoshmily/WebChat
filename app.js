@@ -4,12 +4,12 @@ const
     controller = require('./controllers'),
     serve = require('koa-static'), // 静态资源
     model = require('./model'), // 数据原型
+    Server = require('socket.io'), // websocket
     User = model.User,
-    Chat = model.Chat
-Server = require('socket.io') //websocket
-var app = new Koa()
-var server = app.listen(3000)
-var io = new Server(server)
+    Chat = model.Chat;
+var app = new Koa(),
+    server = app.listen(3000),
+    io = new Server(server);
 
 console.log('app start at port 3000...')
 

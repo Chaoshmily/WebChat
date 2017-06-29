@@ -49,20 +49,20 @@
     <script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
         $('#login').click(function () {
-            $.removeCookie('username')
-            $.removeCookie('password')
-            $.cookie('username', $('#username').val())
-            $.cookie('password', $('#password').val())
+            $.removeCookie('ausername')
+            $.removeCookie('apassword')
+            $.cookie('ausername', $('#username').val())
+            $.cookie('apassword', $('#password').val())
         })
         $('form').submit(function () {
-            $.removeCookie('username')
-            $.removeCookie('password')
-            $.cookie('username', $('#username').val())
-            $.cookie('password', $('#password').val())
+            $.removeCookie('ausername')
+            $.removeCookie('apassword')
+            $.cookie('ausername', $('#username').val())
+            $.cookie('apassword', $('#password').val())
         })
         $('#index').click(function() {
-            $.removeCookie('username')
-            $.removeCookie('password')
+            $.removeCookie('ausername')
+            $.removeCookie('apassword')
         })
     </script>
 </body>
