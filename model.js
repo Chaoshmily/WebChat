@@ -1,7 +1,8 @@
 const
     Sequelize = require('sequelize'),
-    config = require('./config')
+    config = require('./config');
 
+// 初始化sequelize对象
 var sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: 'mysql',
@@ -10,8 +11,9 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
         min: 0,
         idle: 30000
     }
-})
+});
 
+// 用户对象模型
 var User = sequelize.define('t_user', {
     id: {
         type: Sequelize.INTEGER,
@@ -19,14 +21,15 @@ var User = sequelize.define('t_user', {
     },
     nickname: Sequelize.STRING(20),
     username: Sequelize.STRING(20),
-    password: Sequelize.STRING(20),
+    password: Sequelize.STRING(40),
     email: Sequelize.STRING(40),
     tel: Sequelize.STRING(20),
     online: Sequelize.BOOLEAN,
 }, {
     timestamps: false
-})
+});
 
+// 基本信息对象模型
 var Base = sequelize.define('t_base', {
     id: {
         type: Sequelize.INTEGER,
@@ -41,8 +44,9 @@ var Base = sequelize.define('t_base', {
     img: Sequelize.STRING(100),
 }, {
     timestamps: false
-})
+});
 
+// 聊天记录对象模型
 var Chat = sequelize.define('t_chatlog', {
     id: {
         type: Sequelize.INTEGER,
@@ -53,8 +57,9 @@ var Chat = sequelize.define('t_chatlog', {
     userId: Sequelize.INTEGER
 }, {
     timestamps: false
-})
+});
 
+// 管理员对象模型
 var Admin = sequelize.define('t_admin', {
     id: {
         type: Sequelize.INTEGER,
@@ -64,11 +69,11 @@ var Admin = sequelize.define('t_admin', {
     password: Sequelize.STRING(20),
 }, {
     timestamps: false
-})
+});
 
 module.exports = {
     "User": User,
     "Base": Base,
     "Chat": Chat,
     "Admin": Admin
-}
+};

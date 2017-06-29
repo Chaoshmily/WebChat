@@ -1,18 +1,18 @@
-var model = require('../model')
+var model = require('../model');
 
 fn_admin = async(ctx, next) => {
-    var Admin = model.Admin
-    var User = model.User
-    var page = ctx.params.page
-    var username = ctx.cookies.get('ausername') || ctx.request.body.username || ''
-    var password = ctx.cookies.get('apassword') || ctx.request.body.password || ''
-    var admins = await Admin.findAll({
-        where: {
-            username: username,
-            password: password
-        }
-    })
-    console.log(username + ' ' + password)
+    var Admin = model.Admin,
+        User = model.User,
+        page = ctx.params.page,
+        username = ctx.cookies.get('ausername') || ctx.request.body.username || '',
+        password = ctx.cookies.get('apassword') || ctx.request.body.password || '',
+        admins = await Admin.findAll({
+            where: {
+                username: username,
+                password: password
+            }
+        });
+    console.log('username:' + username + ' password:' + password);
 
     if (admins.length == 1) {
         var users = await User.findAll({})

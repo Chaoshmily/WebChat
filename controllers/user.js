@@ -1,4 +1,5 @@
-var model = require('../model') // 数据原型
+var model = require('../model'); // 数据原型
+const crypto = require('crypto');
 
 // 渲染登陆页
 fn_login = async(ctx, next) => {
@@ -39,8 +40,11 @@ fn_checkRegister = async(ctx, next) => {
         repassword = ctx.request.body.repassword || '',
         email = ctx.request.body.email || '',
         tel = ctx.request.body.tel || '',
-        User = model.User;
-    Base = model.Base;
+        User = model.User,
+        Base = model.Base,
+        MD5password = crypto.createHash('md5', password).digest('hex'); // 对密码进行加密处理
+    console.log(MD5password);
+
     var usersU = await User.findAll({ // 查询用户是否存在
         where: {
             username: username
@@ -73,7 +77,7 @@ fn_checkRegister = async(ctx, next) => {
         var user = await User.create({
             nickname: nickname,
             username: username,
-            password: password,
+            password: MD5password,
             email: email,
             tel: tel,
             online: false
