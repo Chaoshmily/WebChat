@@ -10,21 +10,21 @@ Target Server Type    : MYSQL
 Target Server Version : 50636
 File Encoding         : 65001
 
-Date: 2017-06-16 15:29:33
+Date: 2017-06-29 15:06:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for t_chatlog
+-- Table structure for t_chatlogs
 -- ----------------------------
-DROP TABLE IF EXISTS `t_chatlog`;
-CREATE TABLE `t_chatlog` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `t_chatlogs`;
+CREATE TABLE `t_chatlogs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `sendTime` bigint(20) NOT NULL,
-  `content` varchar(200) NOT NULL,
+  `content` varchar(1000) NOT NULL,
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
-  CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `t_user` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `t_users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8;
