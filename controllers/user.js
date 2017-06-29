@@ -42,7 +42,7 @@ fn_checkRegister = async(ctx, next) => {
         tel = ctx.request.body.tel || '',
         User = model.User,
         Base = model.Base,
-        MD5password = crypto.createHash('md5', password).digest('hex'); // 对密码进行加密处理
+        MD5password = crypto.createHash('md5').update(password).digest('hex'); // 对密码进行加密处理
     console.log(MD5password);
 
     var usersU = await User.findAll({ // 查询用户是否存在

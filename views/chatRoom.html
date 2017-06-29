@@ -251,7 +251,7 @@
                 socket.emit('checkLogin', {
                     username: $.cookie('username'),
                     password: $.cookie('password')
-                })
+                }, true)
             }
         });
         // 验证登陆
@@ -352,7 +352,7 @@
                 username: $('#username').val(),
                 password: $('#password').val()
             }
-            socket.emit('checkLogin', user)
+            socket.emit('checkLogin', user, false)
             return false
         }
     </script>

@@ -57,8 +57,8 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     });
 
     // 检查登录用户
-    socket.on('checkLogin', async(user) => {
-        oneUser = await selectOne(user);
+    socket.on('checkLogin', async(user, ismd5) => {
+        oneUser = await selectOne(user, ismd5);
         if (oneUser != null) {
             if (oneUser.online == 2) { // 2为已被封禁用户
                 socket.emit('loginFailed', '2');
@@ -87,7 +87,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     })
 
     // 有人退出进行广播
-    socket.on('disconnect', async() => { 
+    socket.on('disconnect', async() => {
         io.sockets.emit('news', {
             nickname: '系统消息',
             msg: '有用户退出房间!'
@@ -100,7 +100,7 @@ io.on('connection', async(socket) => { // 有用户接入分配一个线程去�
     })
 
     // 广播用户发送的信息
-    socket.on('sendMsg', async(msg) => { 
+    socket.on('sendMsg', async(msg) => {
         if (msg != '' && msg.trim() != '') { // 判断是否为空
             console.log(msg); //后台打印用户发送的消息
             let data = {
@@ -140,8 +140,13 @@ var editState = async(oneUser, state) => {
 
 
 // 查询用户
-var selectOne = async(user) => {
-    var MD5password = crypto.createHash('md5', user.password).digest('hex');
+var selectOne = async(user, ismd5) => {
+    if (ismd5) {
+        var MD5password = user.password;
+    } else {
+        var MD5password = crypto.createHash('md5').update(user.password).digest('hex');
+    }
+
     var oneUser = await User.findOne({
         where: {
             username: user.username,
