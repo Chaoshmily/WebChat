@@ -35,5 +35,8 @@ module.exports = function (dir) {
     let controller_dir = dir || '/controllers',
         router = require('koa-router')();
     addControllers(router, controller_dir);
+    router.get('*', async(ctx, next) => {
+        ctx.render('404.html');
+    })
     return router.routes();
 };
