@@ -7,13 +7,13 @@ A chat application built with Node.js and socket.io.
 
 1. Installation dependent
 
-```bash
+```sh
 npm install
 ```
 2. Import into the database
 
 3. Run node server
 
-```bash
+```sh
 node app.js
 ```
